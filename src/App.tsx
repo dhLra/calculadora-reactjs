@@ -1,5 +1,9 @@
 import { useEffect, useState } from 'react'
 import './App.css'
+import pikachu from './assets/ピカチュウ.gif'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faGithub, faInstagram, faLinkedin } from '@fortawesome/free-brands-svg-icons'
+import { faBackspace } from '@fortawesome/free-solid-svg-icons'
 
 function App() {
   const [query, setQuery] = useState<any>([''])
@@ -19,7 +23,7 @@ function App() {
     let newValues = query
     let newQuant = quantValues
 
-    if (value === "+" || value === "/" || value === "-") {
+    if (value === "+" || value === "/" || value === "-" || value === "*" || value === "√") {
       newQuant = quantValues + 1
       newValues[newQuant] = value
       setQuantValues(newQuant + 1)
@@ -50,6 +54,12 @@ function App() {
         case '/':
           finalResult = div(parseInt(finalResult), parseInt(query[i + 1]))
           break;
+        case '*':
+          finalResult = times(parseInt(finalResult), parseInt(query[i + 1]))
+          break;
+        case '√':
+          finalResult = sqrt(parseInt(finalResult))
+          break;
       }
     })
     setResult(finalResult)
@@ -58,13 +68,17 @@ function App() {
   const sum = (value1: number, value2: number) => {
     return value1 + value2
   }
-
   const minus = (value1: number, value2: number) => {
     return value1 - value2
   }
-
   const div = (value1: number, value2: number) => {
     return value1 / value2
+  }
+  const times = (value1: number, value2: number) => {
+    return value1 * value2
+  }
+  const sqrt = (value1: number) => {
+    return parseFloat(Math.sqrt(value1).toFixed(12))
   }
   return (
 
@@ -77,18 +91,19 @@ function App() {
           })}</p>
           {result === '' ? <h1>{query[quantValues]}</h1> : <h1>{result}</h1>}
         </div>
-        <div className='col-12 mt-3 calculcator-number-pad align-items-center p-0'>
+        <div className='col-12 mt-3 calculcator-number-pad align-items-center p-0' style={{ position: 'relative', right: '0' }}>
           <div className='row mb-3 mt-3'>
             <div className='col-12 d-flex flex-row pe-4'>
-              <button className='btn-symbol mb-1' onClick={() => cleanValues()} style={{ backgroundColor: "red" }}>C</button>
-              <button className='btn-symbol mb-1' onClick={() => cleanValues()} style={{ backgroundColor: "lightgray" }}>B</button>
-              <button className='btn-symbol mb-1' onClick={() => cleanValues()}>G</button>
-              <button className='btn-symbol mb-1' onClick={() => cleanValues()}>L</button>
-              <button className='btn-symbol mb-1' onClick={() => cleanValues()}>I</button>
+              <a href="https://github.com/dhLra" target='_blanck'><button className='btn-midia mb-1' onClick={() => cleanValues()}><FontAwesomeIcon icon={faGithub} /></button></a>
+              <a href="https://www.linkedin.com/in/dhiego-lira-7291b521a/" target='_blanck'><button className='btn-midia mb-1' onClick={() => cleanValues()}><FontAwesomeIcon icon={faLinkedin} /></button></a>
+              <a href="https://www.instagram.com/dhinovonao/" target='_blanck'><button className='btn-midia mb-1' onClick={() => cleanValues()}><FontAwesomeIcon icon={faInstagram} /></button></a>
+              <div className='gif-display' style={{ border: "green solid 1px", width:"100px", marginLeft:"40px", zIndex:"1000" }}>
+              </div>
+              <img src={pikachu} width={90} style={{ position: 'absolute', right: '15px', top: '10px',  zIndex:"900" }}></img>
             </div>
           </div>
           <div className='row d-flex flex-row'>
-            <div className='col-9 number-pad pe-0'>
+            <div className='col-8 number-pad pe-0'>
               <button className='btn-number mb-2' onClick={() => setValue('1')}>1</button>
               <button className='btn-number mb-2' onClick={() => setValue('2')}>2</button>
               <button className='btn-number mb-2' onClick={() => setValue('3')}>3</button>
@@ -102,9 +117,13 @@ function App() {
               <button className='btn-number mb-2' onClick={() => setValue('00')}>00</button>
               <button className='btn-number mb-2' onClick={() => setValue('.')}>.</button>
             </div>
-            <div className='col-3 number-pad justify-content-start d-flex flex-column ps-0 align-items-start'>
+            <div className='col-4 number-pad justify-content-start ps-0 align-items-start'>
+              <button className='btn-symbol mb-1' onClick={() => cleanValues()} style={{ backgroundColor: "red" }}>C</button>
+              <button className='btn-symbol mb-1' onClick={() => cleanValues()} style={{ backgroundColor: "gray" }}><FontAwesomeIcon icon={faBackspace} /></button>
               <button className='btn-symbol mb-2' onClick={() => setValue('+')}>+</button>
               <button className='btn-symbol mb-2' onClick={() => setValue('-')}>-</button>
+              <button className='btn-symbol mb-2' onClick={() => setValue('√')}>√</button>
+              <button className='btn-symbol mb-2' onClick={() => setValue('*')}>*</button>
               <button className='btn-symbol mb-2' onClick={() => setValue('/')}>/</button>
               <button className='btn-symbol mb-2' onClick={() => printResult()}>=</button>
             </div>
